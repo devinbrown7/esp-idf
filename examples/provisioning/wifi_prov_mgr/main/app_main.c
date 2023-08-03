@@ -86,7 +86,7 @@ static void event_handler(void* arg, esp_event_base_t event_base,
 
                 break;
             case WIFI_EVENT_STA_DISCONNECTED:
-                ESP_LOGI(TAG, "WiFi Disconnected");
+                ESP_LOGI(TAG, "Disconnected");
                 break;
             case WIFI_EVENT_SCAN_DONE:
                 ESP_LOGI(TAG, "WiFi Scan Complete");
@@ -283,7 +283,7 @@ void app_main(void)
     init_esp();
     init_prov();    
 
-    int hello_world_delay_ms = 10000;
+    int app_heartbeat_delay_ms = 5000;
     
     #ifdef BLINK
         static uint8_t led_state = 0;
@@ -291,11 +291,11 @@ void app_main(void)
         gpio_reset_pin(led_gpio);
         gpio_set_direction(led_gpio, GPIO_MODE_OUTPUT);
         int led_delay_ms = 1000;
-        int interval = hello_world_delay_ms / led_delay_ms;
+        int interval = app_heartbeat_delay_ms / led_delay_ms;
     #endif // BLINK
 
     while (1) {
-        ESP_LOGI(TAG, "Hello World!");
+        ESP_LOGI(TAG, "===== ===== ===== < App Heartbeat > ===== ===== =====");
         #ifdef BLINK
             for (int i = 0; i < interval; i++) {
                 gpio_set_level(led_gpio, led_state);
@@ -303,12 +303,7 @@ void app_main(void)
                 vTaskDelay(led_delay_ms / portTICK_PERIOD_MS);
             }
         #else
-        vTaskDelay(hello_world_delay_ms / portTICK_PERIOD_MS);
+        vTaskDelay(app_heartbeat_delay_ms / portTICK_PERIOD_MS);
         #endif // BLINK
     }
-
-    // while (1) {
-    //     ESP_LOGI(TAG, "Hello World!");
-    //     vTaskDelay(hello_world_delay_ms / portTICK_PERIOD_MS);
-    // }
 }
